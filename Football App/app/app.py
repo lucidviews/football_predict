@@ -3,6 +3,7 @@ import requests
 import json
 import pandas as pd
 import numpy as np
+import functions as ft
 
 st.markdown(
 """
