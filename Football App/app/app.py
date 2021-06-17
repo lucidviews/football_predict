@@ -33,7 +33,7 @@ team1 = st.sidebar.selectbox('Select Team 1', bundesliga)
 team2 = st.sidebar.selectbox('Select Team 2', bundesliga)
 
 header_params = {
-            'x-rapidapi-key': "ae8bfc1386msh67f895833c24051p1bbd32jsn46bb406c1ce6",
+            'x-rapidapi-key': "eff8f82f7dmsh5acc88f9a56c302p1b47acjsnfe16ac64e984",
             'x-rapidapi-host': "api-football-v1.p.rapidapi.com"
             }
 
