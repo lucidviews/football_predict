@@ -5,7 +5,7 @@ import json
 import datetime
 
 header_params = {
-            'x-rapidapi-key': "848eec715emsh5f15e8bc1776ee0p1826d1jsn93d8284e8db5",
+            'x-rapidapi-key': "eff8f82f7dmsh5acc88f9a56c302p1b47acjsnfe16ac64e984",
             'x-rapidapi-host': "api-football-v1.p.rapidapi.com"
             }
 
