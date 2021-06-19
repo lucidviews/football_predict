@@ -1,9 +1,18 @@
 import streamlit as st
 import requests
 import json
-import pandas as pd
-import numpy as np
 import functions as ft
+
+def line_ups():
+    df1 = ft.get_starting_11(team1_id)
+    df2 = ft.get_starting_11(team2_id)
+
+    with col1:
+        for i in df1['player_id']:
+            st.image(ft.get_photo(i), width=100)
+    with col4:
+        for i in df2['player_id']:
+            st.image(ft.get_photo(i), width=100)
 
 st.markdown(
 """
@@ -21,51 +30,38 @@ st.markdown(
 unsafe_allow_html=True
 )
 
-_, col2, _ = st.beta_columns([30, 200, 30])
+col1, col2, col3 = st.beta_columns([70,200,30])
 with col2:
     st.title('FOOTBALL PREDICTOR')
 st.write("###")
 st.write("###")
 
-bundesliga = ("Borussia Dortmund", "RB Leipzig", "Vfl Wolfsburg", "Bayern Munich", "FC Schalke 04", "Eintracht Frankfurt", "Werder Bremen", "VfB Stuttgart", "Hertha Berlin", "Borussia Mönchengladbach", "Union Berlin", "Bayer Leverkusen", "Arminia Bielefeld", "FSV Mainz 05", "SC Freiburg", "TSG Hoffenheim", "FC Köln", "FC Augsburg")
+#bundesliga = ("Borussia Dortmund", "RB Leipzig", "Vfl Wolfsburg", "Bayern Munich", "FC Schalke 04", "Eintracht Frankfurt", "Werder Bremen", "VfB Stuttgart", "Hertha Berlin", "Borussia Mönchengladbach", "Union Berlin", "Bayer Leverkusen", "Arminia Bielefeld", "FSV Mainz 05", "SC Freiburg", "TSG Hoffenheim", "FC Köln", "FC Augsburg")
+#team1 = st.sidebar.selectbox('Select Team 1', bundesliga)
+#team2 = st.sidebar.selectbox('Select Team 2', bundesliga)
 
-team1 = st.sidebar.selectbox('Select Team 1', bundesliga)
-team2 = st.sidebar.selectbox('Select Team 2', bundesliga)
+team1 = st.sidebar.text_input('Select Team 1', 'Bayern Munich')
+team2 = st.sidebar.text_input('Select Team 1', 'Borussia Dortmund')
 
-header_params = {
-            'x-rapidapi-key': "eff8f82f7dmsh5acc88f9a56c302p1b47acjsnfe16ac64e984",
-            'x-rapidapi-host': "api-football-v1.p.rapidapi.com"
-            }
+team1_id = ft.get_team_id(team1)
+team2_id = ft.get_team_id(team2)
 
-def get_logo(team):
-    url = "https://api-football-v1.p.rapidapi.com/v3/teams"
+pred = ft.predictions(team1_id, team2_id)
 
-    querystring = {"name": team}
-
-    response = requests.request("GET", url, headers=header_params, params=querystring)
-
-    data = json.loads(response.text)
-
-    link = data['response'][0]['team']['logo']
-
-    st.image(link, width=100)
-
-col1, col2, col3, col4 = st.beta_columns([25, 5, 30, 30])
+col1, col2, col3, col4= st.beta_columns([50,40,40,20])
 with col1:
-    get_logo(team1)
+    ft.get_logo(team1)
 with col2:
-    st.markdown("<h2 style='text-align: center; color: white;'>Score</h2>", unsafe_allow_html=True)
+    st.write("###")
+    st.write('Winner:')
 with col3:
-    st.markdown("<h2 style='text-align: center; color: white;'>Score</h2>", unsafe_allow_html=True)
+    st.write("###")
+    st.write(pred['winner']['name'])
 with col4:
-    get_logo(team2)
-
-def ronaldo():
-    st.markdown("![Alt Text](https://i.giphy.com/media/8EoCZQ7lDDVKNMvNzL/giphy.gif)")
-    return
+    ft.get_logo(team2)
 
 st.write("###")
-_, col2, _ = st.beta_columns(3)
-with col2:
-    if st.button("Press me"):
-        ronaldo()
+col1, col2, col3, col4 = st.beta_columns([50,18,62,20])
+with col3:
+    if st.button("Line-ups"):
+        line_ups()
