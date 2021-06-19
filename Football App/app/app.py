@@ -40,15 +40,15 @@ st.write("###")
 #team1 = st.sidebar.selectbox('Select Team 1', bundesliga)
 #team2 = st.sidebar.selectbox('Select Team 2', bundesliga)
 
-team1 = st.sidebar.text_input('Select Team 1', 'Bayern Munich')
-team2 = st.sidebar.text_input('Select Team 1', 'Borussia Dortmund')
+team1 = st.sidebar.text_input('Select Team 1', 'Borussia Dortmund')
+team2 = st.sidebar.text_input('Select Team 1', 'Eintracht Frankfurt')
 
 team1_id = ft.get_team_id(team1)
 team2_id = ft.get_team_id(team2)
 
 pred = ft.predictions(team1_id, team2_id)
 
-col1, col2, col3, col4= st.beta_columns([50,40,40,20])
+col1, col2, col3, col4= st.beta_columns([50,18,62,20])
 with col1:
     ft.get_logo(team1)
 with col2:
