@@ -59,7 +59,7 @@ st.markdown(
 unsafe_allow_html=True
 )
 
-col1, col2, col3 = st.beta_columns([70,80,30])
+col1, col2, col3 = st.beta_columns([20,80,20])
 with col2:
     st.title('FOOTBALL PREDICTOR')
 st.write("###")
@@ -113,4 +113,4 @@ with col2:
             st.write("###")
             st.write("###")
             df =ft.get_h2h(team1_id, team2_id)
-            st.table(df.drop(columns=['home_goals', 'away_goals'], axis=1))
+            st.table(df.drop(columns=['home_goals', 'away_goals', 'date'], axis=1))

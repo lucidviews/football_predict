@@ -79,14 +79,17 @@ def get_h2h(team_id_1, team_id_2):
                        d['teams']['away']['name'],
                        d['fixture']['date'],
                        d['goals']['home'],
-                       d['goals']['away']] for d in data['response'])
-    df = df.rename(columns={0:'home_team', 1:'away_team', 2:'date', 3:'home_goals', 4:'away_goals'})
+                       d['goals']['away'],
+                       d['league']['name'],
+                       d['league']['season'],
+                       d['fixture']['venue']['name']] for d in data['response'])
+    df = df.rename(columns={0:'Home Team', 1:'Away Team', 2:'date', 3:'home_goals', 4:'away_goals', 5:'League', 6:'Season', 7:'Stadium'})
     df = df.dropna()
     df = df.astype({'home_goals':np.int8})
     df = df.astype({'away_goals':np.int8})
     df['result'] = df['home_goals'].map(str)+':'+df['away_goals'].map(str)
     df = df.sort_values(by=['date'], ascending=False)
-
+    df['Date'] = df['date'].apply(lambda x: x.split('T')[0])
     return df.reset_index(drop=True).head()
 
 
