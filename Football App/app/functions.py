@@ -3,6 +3,7 @@ import pandas as pd
 from pprint import pprint
 import json
 import datetime
+import numpy as np
 import streamlit as st
 
 header_params = {
@@ -80,8 +81,13 @@ def get_h2h(team_id_1, team_id_2):
                        d['goals']['home'],
                        d['goals']['away']] for d in data['response'])
     df = df.rename(columns={0:'home_team', 1:'away_team', 2:'date', 3:'home_goals', 4:'away_goals'})
-    
-    return df
+    df = df.dropna()
+    df = df.astype({'home_goals':np.int8})
+    df = df.astype({'away_goals':np.int8})
+    df['result'] = df['home_goals'].map(str)+':'+df['away_goals'].map(str)
+    df = df.sort_values(by=['date'], ascending=False)
+
+    return df.reset_index(drop=True).head()
 
 
 def get_injured_player(team_id, date=datetime.date.today()):
@@ -132,6 +138,7 @@ def get_starting_11(team_id):
     
     df = pd.DataFrame([d['player']['id'], d['player']['name'], d['player']['pos'], d['player']['number']] for d in data['response'][0]['startXI'])
     df = df.rename(columns={0:'player_id', 1:'player', 2:'position', 3:'jersey_number'})
+    df = df.replace({'G':'Goalkeeper', 'D': 'Defender', 'M': 'Midfielder', 'F':'Forward'})
 
     return df
 

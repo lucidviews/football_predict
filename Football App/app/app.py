@@ -3,17 +3,46 @@ import requests
 import json
 import functions as ft
 
+#@st.cache(suppress_st_warning=True)
 def line_ups():
     df1 = ft.get_starting_11(team1_id)
     df2 = ft.get_starting_11(team2_id)
-
     with col1:
-        for i in df1['player_id']:
-            st.image(ft.get_photo(i), width=100)
-    with col4:
-        for i in df2['player_id']:
-            st.image(ft.get_photo(i), width=100)
+        for i in range(len(df1['player_id'])):
+            st.image(ft.get_photo(df1.iloc[i, 0]), width=100)
+            st.write(df1.iloc[i, 1])
+            st.write('Pos: ', df1.iloc[i, 2])
+            st.write('No.: ', str(df1.iloc[i, 3]))
+            st.write("###")
+    with col3:
+        for i in range(len(df2['player_id'])):
+            st.image(ft.get_photo(df2.iloc[i, 0]), width=100)
+            st.write(df2.iloc[i, 1])
+            st.write('Pos: ', df2.iloc[i, 2])
+            st.write('No.: ', str(df2.iloc[i, 3]))
+            st.write("###")
 
+def injured_players():
+    df1 = ft.get_injured_player(team1_id)
+    df2 = ft.get_injured_player(team2_id)
+    with col1:
+        if df1.empty:
+            st.write('**No injuries are known!**')
+        else:
+            for i in range(len(df1['player_id'])):
+                st.image(ft.get_photo(df1.iloc[i, 0]), width=100)
+                st.write(df1.iloc[i, 1])
+                st.write('Status: ', df1.iloc[i, 2])
+                st.write("###")
+    with col3:
+        if df2.empty:
+            st.write('**No injuries are known!**')
+        else:
+            for i in range(len(df2['player_id'])):
+                st.image(ft.get_photo(df2.iloc[i, 0]), width=100)
+                st.write(df2.iloc[i, 1])
+                st.write('Status: ', df2.iloc[i, 2])
+                st.write("###")
 st.markdown(
 """
 <style>
@@ -30,7 +59,7 @@ st.markdown(
 unsafe_allow_html=True
 )
 
-col1, col2, col3 = st.beta_columns([70,200,30])
+col1, col2, col3 = st.beta_columns([70,80,30])
 with col2:
     st.title('FOOTBALL PREDICTOR')
 st.write("###")
@@ -48,20 +77,40 @@ team2_id = ft.get_team_id(team2)
 
 pred = ft.predictions(team1_id, team2_id)
 
-col1, col2, col3, col4= st.beta_columns([50,18,62,20])
+col1, col2, col3= st.beta_columns([50,60,30])
 with col1:
+    st.write('_Home Win:_ ', pred['percent']['home'])
     ft.get_logo(team1)
+    st.write("###")
 with col2:
+    st.write('_Draw_: ', pred['percent']['draw'])
     st.write("###")
-    st.write('Winner:')
-with col3:
-    st.write("###")
+    st.write('_Predicted Winner_:')
     st.write(pred['winner']['name'])
-with col4:
+
+with col3:
+    st.write('_Away Win_: ', pred['percent']['away'])
     ft.get_logo(team2)
+    st.write("###")
 
 st.write("###")
-col1, col2, col3, col4 = st.beta_columns([50,18,62,20])
-with col3:
-    if st.button("Line-ups"):
+with col2:
+    st.write("###")
+    info = st.radio(
+        'Show me',
+        ('Line-ups', 'Injured Players', 'Head 2 Head')
+    )
+    if info == 'Line-ups':
         line_ups()
+    elif info == 'Injured Players':
+        injured_players()
+    elif info == 'Head 2 Head':
+        with col1:
+            st.write("###")
+            st.write("###")
+            st.write("###")
+            st.write("###")
+            st.write("###")
+            st.write("###")
+            df =ft.get_h2h(team1_id, team2_id)
+            st.table(df.drop(columns=['home_goals', 'away_goals'], axis=1))
