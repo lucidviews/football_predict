@@ -70,14 +70,14 @@ st.write("###")
 #team2 = st.sidebar.selectbox('Select Team 2', bundesliga)
 
 team1 = st.sidebar.text_input('Select Team 1', 'Borussia Dortmund')
-team2 = st.sidebar.text_input('Select Team 1', 'Eintracht Frankfurt')
+team2 = st.sidebar.text_input('Select Team 2', 'Eintracht Frankfurt')
 
 team1_id = ft.get_team_id(team1)
 team2_id = ft.get_team_id(team2)
 
 pred = ft.predictions(team1_id, team2_id)
 
-col1, col2, col3= st.beta_columns([50,50,50])
+col1, col2, col3= st.beta_columns([10, 10, 10])
 with col1:
     st.write('_Home Win:_ ', pred['percent']['home'])
     ft.get_logo(team1)
