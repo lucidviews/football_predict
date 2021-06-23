@@ -77,7 +77,7 @@ team2_id = ft.get_team_id(team2)
 
 pred = ft.predictions(team1_id, team2_id)
 
-col1, col2, col3= st.beta_columns([50,60,30])
+col1, col2, col3= st.beta_columns([50,50,50])
 with col1:
     st.write('_Home Win:_ ', pred['percent']['home'])
     ft.get_logo(team1)
