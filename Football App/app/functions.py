@@ -32,7 +32,8 @@ def get_team_id(team):
     return data['response'][0]['team']['id']
 
 
-def get_standings(team_id):
+# TODO: remove if not needed
+def get_standings(team_id, season='2020'):
     """
     Gets the current position of a team in the league it is playing in.
 
@@ -46,13 +47,50 @@ def get_standings(team_id):
     
     year = datetime.datetime.now().year
 
-    querystring = {"season":str(year-1),"team":str(team_id)}
+    querystring = {"season":str(season),"team":str(team_id)}
 
     response = requests.request("GET", url, headers=header_params, params=querystring)
     
     data = json.loads(response.text)
     
     return data['response'][0]['league']['standings'][0][0]['rank']
+
+
+def get_team_performance(team_id, season='2020'):
+    """
+    Gets the current position of a team in the league it is playing in.
+
+    Args:
+        team_id (int): API-Football team ID.
+
+    Returns:
+        integer: An integer indicating the position in the league.
+    """    
+    url = "https://api-football-v1.p.rapidapi.com/v3/standings"
+    
+    year = datetime.datetime.now().year
+
+    querystring = {"season":str(season),"team":str(team_id)}
+
+    response = requests.request("GET", url, headers=header_params, params=querystring)
+    
+    data = json.loads(response.text)
+
+    dict = {'rank': data['response'][0]['league']['standings'][0][0]['rank'],
+            'league': data['response'][0]['league']['standings'][0][0]['group'],
+            'points': data['response'][0]['league']['standings'][0][0]['points'],
+            'form': data['response'][0]['league']['standings'][0][0]['form'],
+    }
+    
+    return dict
+
+
+def get_standings_over_time(team_id, seasons=['2020', '2019', '2018', '2017', '2016']):
+    dict = {}
+    for season in seasons:
+        dict[season] = get_standings(team_id, season)
+
+    return dict
 
 
 def get_h2h(team_id_1, team_id_2):    
@@ -229,6 +267,19 @@ def _get_last_fixture_ids(team_id, num_last_matches):
     fixture_ids = [f['fixture']['id'] for f in data['response']]
 
     return fixture_ids
+
+
+def _get_last_fixture_dates(team_id, num_last_matches):
+    url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
+
+    querystring = {"last": str(num_last_matches), 'team': str(team_id)}
+
+    response = requests.request("GET", url, headers=header_params, params=querystring)
+    data = json.loads(response.text)
+
+    fixture_dates = [f['fixture']['date'] for f in data['response']]
+
+    return fixture_dates
 
 
 def ronaldo():
