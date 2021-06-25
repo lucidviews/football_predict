@@ -68,15 +68,16 @@ def injured_players():
                 st.write(df2.iloc[i, 1])
                 st.write('Status: ', df2.iloc[i, 2])
                 st.write("###")
+
 st.markdown(
 """
 <style>
 .reportview-container {
-    background: url("https://wallpapercave.com/wp/FZauxCv.jpg");
+    background: url("https://wallpapercave.com/wp/5DMx8Xb.jpg");
     background-size: cover;
 }
 .sidebar .sidebar-content {
-    background: url("https://wallpapercave.com/wp/FZauxCv.jpg");
+    background: url("https://wallpapercave.com/wp/5DMx8Xb.jpg");
     background-size: cover;
 }
 </style>
