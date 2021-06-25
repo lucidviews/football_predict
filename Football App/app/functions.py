@@ -282,10 +282,6 @@ def _get_last_fixture_dates(team_id, num_last_matches):
     return fixture_dates
 
 
-def firework():
-    st.markdown("![Alt Text](https://media4.giphy.com/media/mc4W9sigqDKXm/giphy.gif)")
-    return
-
 def get_logo(team):
     url = "https://api-football-v1.p.rapidapi.com/v3/teams"
 

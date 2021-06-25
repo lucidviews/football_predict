@@ -112,8 +112,9 @@ with col1:
 with col2:
     st.write('_Draw_: ', pred['percent']['draw'])
     st.write("###")
-    st.write('_Predicted Winner_:')
-    st.write(pred['winner']['name'])
+    if st.button('Show winner'):
+        st.write(pred['winner']['name'])
+        st.image('https://media2.giphy.com/media/jIRyzncqRWzM3GYaQm/giphy.gif', width=150)
 
 with col3:
     st.write('_Away Win_: ', pred['percent']['away'])
@@ -137,6 +138,11 @@ with col2:
             st.write("###")
             st.write("###")
             st.write("###")
+            st.write("###")
+            st.write("###")
+            st.write("###")
+            st.write("###")
+
             df =ft.get_h2h(team1_id, team2_id)
             st.table(df.drop(columns=['home_goals', 'away_goals', 'date'], axis=1))
     elif info == 'Standings':
