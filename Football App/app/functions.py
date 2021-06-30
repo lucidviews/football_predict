@@ -238,6 +238,27 @@ def predictions(team_id_1, team_id_2):
 
     return data['response'][0]['predictions']
 
+def get_home_away_team(team_id_1, team_id_2):
+    """
+    This functions returns the home and away team according to the fixture in consideration.
+    """
+    url = "https://api-football-v1.p.rapidapi.com/v3/fixtures/headtohead"
+    
+    h2h_string = str(team_id_1)+'-'+str(team_id_2)
+
+    if next==True:
+        querystring = {"next":"1", 'h2h':h2h_string}
+    else: 
+        querystring = {"last":"1", 'h2h':h2h_string}
+
+    response = requests.request("GET", url, headers=header_params, params=querystring)
+    data = json.loads(response.text)
+
+    home_team = data['response'][0]['teams']['home']["id"]
+    away_team = data['response'][0]['teams']['away']["id"]
+
+    return home_team, away_team
+
 
 def get_photo(player_id):
     url = "https://api-football-v1.p.rapidapi.com/v3/players"
@@ -282,10 +303,10 @@ def _get_last_fixture_dates(team_id, num_last_matches):
     return fixture_dates
 
 
-def get_logo(team):
+def get_logo(team_id):
     url = "https://api-football-v1.p.rapidapi.com/v3/teams"
 
-    querystring = {"name": team}
+    querystring = {"id": team_id}
 
     response = requests.request("GET", url, headers=header_params, params=querystring)
 

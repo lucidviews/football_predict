@@ -29,7 +29,7 @@ def get_standings(team_id, season='2020'):
     
     return data['response'][0]['league']['standings'][0][0]['rank']
 
-def line_ups():
+def line_ups(team1_id, team2_id):
     df1 = ft.get_starting_11(team1_id)
     df2 = ft.get_starting_11(team2_id)
     with col1:
@@ -47,7 +47,7 @@ def line_ups():
             st.write('No.: ', str(df2.iloc[i, 3]))
             st.write("###")
 
-def injured_players():
+def injured_players(team1_id, team2_id):
     df1 = ft.get_injured_player(team1_id)
     df2 = ft.get_injured_player(team2_id)
     with col1:
@@ -92,6 +92,7 @@ team1_id = ft.get_team_id(team1)
 team2_id = ft.get_team_id(team2)
 
 pred = ft.predictions(team1_id, team2_id)
+home_team, away_team = ft.get_home_away_team(team1_id, team2_id)
 
 col1, col2, col3 = st.beta_columns([20,80,20])
 with col2:
@@ -107,7 +108,7 @@ st.write("###")
 col1, col2, col3= st.beta_columns([50,50,50])
 with col1:
     st.write('_Home Win:_ ', pred['percent']['home'])
-    ft.get_logo(team1)
+    ft.get_logo(home_team)
     st.write("###")
 with col2:
     st.write('_Draw_: ', pred['percent']['draw'])
@@ -118,7 +119,7 @@ with col2:
 
 with col3:
     st.write('_Away Win_: ', pred['percent']['away'])
-    ft.get_logo(team2)
+    ft.get_logo(away_team)
     st.write("###")
 
 st.write("###")
@@ -129,7 +130,7 @@ with col2:
         ('Line-ups', 'Standings', 'Head 2 Head', 'Injured Players')
     )
     if info == 'Line-ups':
-        line_ups()
+        line_ups(home_team, away_team)
     elif info == 'Head 2 Head':
         with col1:
             st.write("###")
@@ -154,7 +155,7 @@ with col2:
             st.write("###")
             st.write("###")
 
-            dict_team1 = ft.get_team_performance(team1_id)
+            dict_team1 = ft.get_team_performance(home_team)
             st.write('## Rank: ', dict_team1['rank'])
             st.write('## #Points: ', dict_team1['points'])
             st.write('## Form: ', dict_team1['form'])
@@ -182,11 +183,11 @@ with col2:
             st.write("###")
             st.write("###")
 
-            dict_team2 = ft.get_team_performance(team2_id)
+            dict_team2 = ft.get_team_performance(away_team)
             st.write('## Rank: ', dict_team2['rank'])
             st.write('## #Points: ', dict_team2['points'])
             st.write('## Form: ', dict_team2['form'])
 
 
     elif info == 'Injured Players':
-        injured_players()
+        injured_players(home_team, away_team)
