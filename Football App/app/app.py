@@ -107,7 +107,7 @@ st.write("###")
 
 col1, col2, col3= st.beta_columns([50,50,50])
 with col1:
-    st.write('_Home Win:_ ', pred['percent']['home'])
+    st.write('_Win_: ', pred['percent']['home'])
     ft.get_logo(home_team)
     st.write("###")
 with col2:
@@ -118,7 +118,7 @@ with col2:
         st.image('https://media2.giphy.com/media/jIRyzncqRWzM3GYaQm/giphy.gif', width=150)
 
 with col3:
-    st.write('_Away Win_: ', pred['percent']['away'])
+    st.write('_Win_: ', pred['percent']['away'])
     ft.get_logo(away_team)
     st.write("###")
 
