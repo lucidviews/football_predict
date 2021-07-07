@@ -7,3 +7,4 @@ numpy>=1.2.1
 pyproj>=1.9.3
 pyshp>=1.2.0
 six
+plotly_express
