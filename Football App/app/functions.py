@@ -125,7 +125,7 @@ def get_h2h(team_id_1, team_id_2):
     df = df.dropna()
     df = df.astype({'home_goals':np.int8})
     df = df.astype({'away_goals':np.int8})
-    df['result'] = df['home_goals'].map(str)+':'+df['away_goals'].map(str)
+    df['Result'] = df['home_goals'].map(str)+':'+df['away_goals'].map(str)
     df = df.sort_values(by=['date'], ascending=False)
     df['Date'] = df['date'].apply(lambda x: x.split('T')[0])
     return df.reset_index(drop=True).head()
