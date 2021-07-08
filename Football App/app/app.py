@@ -85,8 +85,18 @@ st.markdown(
 unsafe_allow_html=True
 )
 
-team1 = st.sidebar.text_input('Select Team 1', 'Borussia Dortmund')
-team2 = st.sidebar.text_input('Select Team 2', 'Eintracht Frankfurt')
+leagues = ft.get_all_leagues()
+
+league = st.sidebar.selectbox('Select League', list(leagues.keys()), index=list(leagues.keys()).index('Bundesliga 1'))
+st.sidebar.write("###")
+st.sidebar.write("###")
+
+
+league_id = leagues[league]
+teams = ft.get_teams_of_league(league_id)
+
+team1 = st.sidebar.selectbox('Select Team 1', teams)
+team2 = st.sidebar.selectbox('Select Team 2', teams, index=2)
 
 team1_id = ft.get_team_id(team1)
 team2_id = ft.get_team_id(team2)

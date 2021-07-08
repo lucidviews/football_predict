@@ -315,3 +315,37 @@ def get_logo(team_id):
     link = data['response'][0]['team']['logo']
 
     st.image(link, width=100)
+
+
+def get_all_leagues(season='2020'):
+    url = "https://api-football-v1.p.rapidapi.com/v3/leagues"
+
+    querystring = {'season':season}
+
+    response = requests.request("GET", url, headers=header_params, params=querystring)
+
+    data = json.loads(response.text)
+    
+    leagues = {}
+
+    for element in data['response']:
+        leagues[element['league']['name']] = element['league']['id']
+
+    return leagues
+
+
+def get_teams_of_league(league_id, season='2020'):
+    url = "https://api-football-v1.p.rapidapi.com/v3/teams"
+
+    querystring = {'season':season, 'league':str(league_id)}
+
+    response = requests.request("GET", url, headers=header_params, params=querystring)
+
+    data = json.loads(response.text)
+    
+    teams = []
+
+    for element in data['response']:
+        teams.append(element['team']['name'])
+
+    return teams
