@@ -30,6 +30,19 @@ def get_standings(team_id, season='2020'):
     return data['response'][0]['league']['standings'][0][0]['rank']
 
 def line_ups(team1_id, team2_id):
+    """
+        Gets the portraits of each player with his name, number and position in the starting 11 of both teams.
+
+       Args:
+        team_id_1 (integer): API-Football team ID.
+        team_id_2 (integer): API-Football team ID.
+
+        Returns:
+            images: Portaits of players for each team.
+            string: Names of players for each team.
+            string: Positions of players for each team.
+            string: Number of players for each team.
+        """
     df1 = ft.get_starting_11(team1_id)
     df2 = ft.get_starting_11(team2_id)
     with col1:
@@ -48,6 +61,16 @@ def line_ups(team1_id, team2_id):
             st.write("###")
 
 def injured_players(team1_id, team2_id):
+    """
+        Gets all players of both team who are currently(!) injured.
+
+        Args:
+        team_id_1 (integer): API-Football team ID.
+        team_id_2 (integer): API-Football team ID
+
+        Returns:
+            string: Name of injured players for each team.
+        """
     df1 = ft.get_injured_player(team1_id)
     df2 = ft.get_injured_player(team2_id)
     with col1:
@@ -69,6 +92,8 @@ def injured_players(team1_id, team2_id):
                 st.write('Status: ', df2.iloc[i, 2])
                 st.write("###")
 
+'''Setting the background picture of the app'''
+
 st.markdown(
 """
 <style>
@@ -85,12 +110,13 @@ st.markdown(
 unsafe_allow_html=True
 )
 
+'''Setting up a sidebar with league and team selection'''
+
 leagues = ft.get_all_leagues()
 
 league = st.sidebar.selectbox('Select League', list(leagues.keys()), index=list(leagues.keys()).index('Bundesliga 1'))
 st.sidebar.write("###")
 st.sidebar.write("###")
-
 
 league_id = leagues[league]
 teams = ft.get_teams_of_league(league_id)
@@ -98,11 +124,17 @@ teams = ft.get_teams_of_league(league_id)
 team1 = st.sidebar.selectbox('Select Team 1', teams)
 team2 = st.sidebar.selectbox('Select Team 2', teams, index=2)
 
+'''Pulling ids of teams based on sidebar selection with get_team_id function'''
+
 team1_id = ft.get_team_id(team1)
 team2_id = ft.get_team_id(team2)
 
+'''Definition of variables for prediciton'''
+
 pred = ft.predictions(team1_id, team2_id)
 home_team, away_team = ft.get_home_away_team(team1_id, team2_id)
+
+'''Setting up the header of application with three columns'''
 
 col1, col2, col3 = st.beta_columns([20,80,20])
 with col2:
@@ -111,9 +143,7 @@ with col2:
 st.write("###")
 st.write("###")
 
-#bundesliga = ("Borussia Dortmund", "RB Leipzig", "Vfl Wolfsburg", "Bayern Munich", "FC Schalke 04", "Eintracht Frankfurt", "Werder Bremen", "VfB Stuttgart", "Hertha Berlin", "Borussia Mönchengladbach", "Union Berlin", "Bayer Leverkusen", "Arminia Bielefeld", "FSV Mainz 05", "SC Freiburg", "TSG Hoffenheim", "FC Köln", "FC Augsburg")
-#team1 = st.sidebar.selectbox('Select Team 1', bundesliga)
-#team2 = st.sidebar.selectbox('Select Team 2', bundesliga)
+'''Pulling percentages of prediction for win, draw and loss and implementation of animation to show winner with button'''
 
 col1, col2, col3= st.beta_columns([50,50,50])
 with col1:
@@ -126,11 +156,12 @@ with col2:
     if st.button('Show winner'):
         st.write(pred['winner']['name'])
         st.image('https://media2.giphy.com/media/jIRyzncqRWzM3GYaQm/giphy.gif', width=150)
-
 with col3:
     st.write('_Win_: ', pred['percent']['away'])
     ft.get_logo(away_team)
     st.write("###")
+
+'''Adding streamlit radio to middle column for selection of functionalities'''
 
 st.write("###")
 with col2:
@@ -139,8 +170,14 @@ with col2:
         'Show me',
         ('Line-ups', 'Standings', 'Head 2 Head', 'Injured Players')
     )
+
+    '''If line-up is selected, the players images are pulled with the line_ups function'''
+
     if info == 'Line-ups':
         line_ups(home_team, away_team)
+
+    '''If Head 2 Head is selected, a streamlit table with information of last fixtures between selectd teams is shown'''
+
     elif info == 'Head 2 Head':
         with col1:
             st.write("###")
@@ -156,6 +193,9 @@ with col2:
 
             df =ft.get_h2h(team1_id, team2_id)
             st.table(df.drop(columns=['home_goals', 'away_goals', 'date'], axis=1))
+
+    '''If Standings is selected, the teams rank, points and form of each team is shown in column 1 and 3. Also a plotly chart is created showing the rankings of each team over the last 5 seasons.'''
+
     elif info == 'Standings':
         with col1:
             st.write("###")
@@ -198,6 +238,7 @@ with col2:
             st.write('## #Points: ', dict_team2['points'])
             st.write('## Form: ', dict_team2['form'])
 
+'''If Injured Players is selected, they are shown of each team with the injured_players function'''
 
     elif info == 'Injured Players':
         injured_players(home_team, away_team)
