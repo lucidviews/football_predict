@@ -92,7 +92,7 @@ def injured_players(team1_id, team2_id):
                 st.write('Status: ', df2.iloc[i, 2])
                 st.write("###")
 
-'''Setting the background picture of the app'''
+#Setting the background picture of the app
 
 st.markdown(
 """
@@ -110,7 +110,7 @@ st.markdown(
 unsafe_allow_html=True
 )
 
-'''Setting up a sidebar with league and team selection'''
+#Setting up a sidebar with league and team selection
 
 leagues = ft.get_all_leagues()
 
@@ -124,17 +124,17 @@ teams = ft.get_teams_of_league(league_id)
 team1 = st.sidebar.selectbox('Select Team 1', teams)
 team2 = st.sidebar.selectbox('Select Team 2', teams, index=2)
 
-'''Pulling ids of teams based on sidebar selection with get_team_id function'''
+#Pulling ids of teams based on sidebar selection with get_team_id function
 
 team1_id = ft.get_team_id(team1)
 team2_id = ft.get_team_id(team2)
 
-'''Definition of variables for prediciton'''
+#Definition of variables for prediciton
 
 pred = ft.predictions(team1_id, team2_id)
 home_team, away_team = ft.get_home_away_team(team1_id, team2_id)
 
-'''Setting up the header of application with three columns'''
+#Setting up the header of application with three columns
 
 col1, col2, col3 = st.beta_columns([20,80,20])
 with col2:
@@ -143,7 +143,7 @@ with col2:
 st.write("###")
 st.write("###")
 
-'''Pulling percentages of prediction for win, draw and loss and implementation of animation to show winner with button'''
+#Pulling percentages of prediction for win, draw and loss and implementation of animation to show winner with button
 
 col1, col2, col3= st.beta_columns([50,50,50])
 with col1:
@@ -161,7 +161,7 @@ with col3:
     ft.get_logo(away_team)
     st.write("###")
 
-'''Adding streamlit radio to middle column for selection of functionalities'''
+#Adding streamlit radio to middle column for selection of functionalities
 
 st.write("###")
 with col2:
@@ -171,12 +171,10 @@ with col2:
         ('Line-ups', 'Standings', 'Head 2 Head', 'Injured Players')
     )
 
-    '''If line-up is selected, the players images are pulled with the line_ups function'''
+    #Calling fucntions according to selected functionality
 
     if info == 'Line-ups':
         line_ups(home_team, away_team)
-
-    '''If Head 2 Head is selected, a streamlit table with information of last fixtures between selectd teams is shown'''
 
     elif info == 'Head 2 Head':
         with col1:
@@ -193,8 +191,6 @@ with col2:
 
             df =ft.get_h2h(team1_id, team2_id)
             st.table(df.drop(columns=['home_goals', 'away_goals', 'date'], axis=1))
-
-    '''If Standings is selected, the teams rank, points and form of each team is shown in column 1 and 3. Also a plotly chart is created showing the rankings of each team over the last 5 seasons.'''
 
     elif info == 'Standings':
         with col1:
@@ -237,8 +233,6 @@ with col2:
             st.write('## Rank: ', dict_team2['rank'])
             st.write('## #Points: ', dict_team2['points'])
             st.write('## Form: ', dict_team2['form'])
-
-'''If Injured Players is selected, they are shown of each team with the injured_players function'''
 
     elif info == 'Injured Players':
         injured_players(home_team, away_team)
