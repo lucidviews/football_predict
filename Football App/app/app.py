@@ -131,15 +131,15 @@ team2_id = ft.get_team_id(team2)
 
 #Definition of variables for prediciton
 
-pred = ft.predictions(team1_id, team2_id)
-home_team, away_team = ft.get_home_away_team(team1_id, team2_id)
+pred, home_team, away_team = ft.predictions(team1_id, team2_id)
+#home_team, away_team = ft.get_home_away_team(team1_id, team2_id)
 
 #Setting up the header of application with three columns
 
 col1, col2, col3 = st.beta_columns([20,80,20])
 with col2:
     st.title('FOOTBALL PREDICTOR')
-    st.write('## _{}_'.format(ft.get_team_performance(team1_id)['league']))
+    st.write('## _{}_'.format(league))
 st.write("###")
 st.write("###")
 

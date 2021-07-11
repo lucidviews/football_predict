@@ -236,20 +236,21 @@ def predictions(team_id_1, team_id_2):
     response = requests.request("GET", url, headers=header_params, params=querystring)
     data = json.loads(response.text)
 
-    return data['response'][0]['predictions']
+    return data['response'][0]['predictions'], data['response'][0]['teams']['home']['id'], data['response'][0]['teams']['away']['id']
 
 def get_home_away_team(team_id_1, team_id_2):
     """
     This functions returns the home and away team according to the fixture in consideration.
     """
-    url = "https://api-football-v1.p.rapidapi.com/v3/fixtures/headtohead"
+    url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
     
-    h2h_string = str(team_id_1)+'-'+str(team_id_2)
+    try:
+        fixture_id = _get_fixture_id_h2h(team_id_1, team_id_2)
+    except:
+        print('using last fixture')
+        fixture_id = _get_fixture_id_h2h(team_id_1, team_id_2, next=False)
 
-    if next==True:
-        querystring = {"next":"1", 'h2h':h2h_string}
-    else: 
-        querystring = {"last":"1", 'h2h':h2h_string}
+    querystring = {"fixture":fixture_id}
 
     response = requests.request("GET", url, headers=header_params, params=querystring)
     data = json.loads(response.text)
