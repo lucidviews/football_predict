@@ -132,7 +132,6 @@ team2_id = ft.get_team_id(team2)
 #Definition of variables for prediciton
 
 pred, home_team, away_team = ft.predictions(team1_id, team2_id)
-#home_team, away_team = ft.get_home_away_team(team1_id, team2_id)
 
 #Setting up the header of application with three columns
 

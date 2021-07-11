@@ -238,28 +238,6 @@ def predictions(team_id_1, team_id_2):
 
     return data['response'][0]['predictions'], data['response'][0]['teams']['home']['id'], data['response'][0]['teams']['away']['id']
 
-def get_home_away_team(team_id_1, team_id_2):
-    """
-    This functions returns the home and away team according to the fixture in consideration.
-    """
-    url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
-    
-    try:
-        fixture_id = _get_fixture_id_h2h(team_id_1, team_id_2)
-    except:
-        print('using last fixture')
-        fixture_id = _get_fixture_id_h2h(team_id_1, team_id_2, next=False)
-
-    querystring = {"fixture":fixture_id}
-
-    response = requests.request("GET", url, headers=header_params, params=querystring)
-    data = json.loads(response.text)
-
-    home_team = data['response'][0]['teams']['home']["id"]
-    away_team = data['response'][0]['teams']['away']["id"]
-
-    return home_team, away_team
-
 
 def get_photo(player_id):
     url = "https://api-football-v1.p.rapidapi.com/v3/players"
