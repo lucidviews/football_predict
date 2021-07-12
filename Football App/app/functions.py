@@ -32,7 +32,6 @@ def get_team_id(team):
     return data['response'][0]['team']['id']
 
 
-# TODO: remove if not needed
 def get_standings(team_id, season='2020'):
     """
     Gets the current position of a team in the league it is playing in.
@@ -86,6 +85,16 @@ def get_team_performance(team_id, season='2020'):
 
 
 def get_standings_over_time(team_id, seasons=['2020', '2019', '2018', '2017', '2016']):
+    """
+    Calls the get_standings function for one or multiple times and stores the results in a dict.
+
+    Args:
+        team_id (integer): API-Football team ID.
+        seasons (list, optional): Determines the different seasons for which the get_standings function is called. Defaults to ['2020', '2019', '2018', '2017', '2016'].
+
+    Returns:
+        dict: Contains a season as a key and a team's league rank in this season as a value.
+    """    
     dict = {}
     for season in seasons:
         dict[season] = get_standings(team_id, season)
@@ -160,7 +169,7 @@ def get_injured_player(team_id, date=datetime.date.today()):
 
 def get_starting_11(team_id):
     """
-    Gets the satrting line up of the last game a team has palyed.
+    Gets the satrting line up of the last game a team has played.
 
     Args:
         team_id (integer): API-Football team ID.
@@ -240,6 +249,15 @@ def predictions(team_id_1, team_id_2):
 
 
 def get_photo(player_id):
+    """
+    Gets the photo of a certain player.
+
+    Args:
+        player_id (integer): API-Football team ID.
+
+    Returns:
+        url: URL that leads to the file containing a player's picture.
+    """    
     url = "https://api-football-v1.p.rapidapi.com/v3/players"
 
     querystring = {"id": player_id, "season": "2020"}
@@ -257,6 +275,16 @@ def get_photo(player_id):
 
 
 def _get_last_fixture_ids(team_id, num_last_matches):
+    """
+    Gets one or more fixture IDs of a specified team.
+
+    Args:
+        team_id (integer): API-Football team ID.
+        num_last_matches (integer): Defines the number of last fixture IDs that is returned.
+
+    Returns:
+        list: Contains one or many last fixture IDs of a team.
+    """    
     url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
 
     querystring = {"last": str(num_last_matches), 'team': str(team_id)}
@@ -270,6 +298,16 @@ def _get_last_fixture_ids(team_id, num_last_matches):
 
 
 def _get_last_fixture_dates(team_id, num_last_matches):
+    """
+    Gets one or more fixture dates of a specified team.
+
+    Args:
+        team_id (integer): API-Football team ID.
+        num_last_matches (integer): Defines the number of last fixture dates that is returned.
+
+    Returns:
+        list: Contains one or many last fixture dates of a team.
+    """
     url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
 
     querystring = {"last": str(num_last_matches), 'team': str(team_id)}
@@ -283,6 +321,12 @@ def _get_last_fixture_dates(team_id, num_last_matches):
 
 
 def get_logo(team_id):
+    """
+    Gets a team's logo and outputs it as a streamlit element.
+
+    Args:
+        team_id (integer): API-Football team ID.
+    """    
     url = "https://api-football-v1.p.rapidapi.com/v3/teams"
 
     querystring = {"id": team_id}
@@ -297,6 +341,15 @@ def get_logo(team_id):
 
 
 def get_all_leagues(season='2020'):
+    """
+    Gets all leagues that the API is supporting in a specified season.
+
+    Args:
+        season (str, optional): Defines the season out of which all leagues are returned. Defaults to '2020'.
+
+    Returns:
+        dict: Contains league names as values and their corresponding IDs as values.
+    """    
     url = "https://api-football-v1.p.rapidapi.com/v3/leagues"
 
     querystring = {'season':season}
@@ -314,6 +367,16 @@ def get_all_leagues(season='2020'):
 
 
 def get_teams_of_league(league_id, season='2020'):
+    """
+    Gets all teams that are associated with a specified league in a specified season.
+
+    Args:
+        league_id (integer): API-Football league ID.
+        season (str, optional): Defines the season out of which all teams of a league will be returned. Defaults to '2020'.
+
+    Returns:
+        list: Contains all teams of a specified league in a specified season. 
+    """    
     url = "https://api-football-v1.p.rapidapi.com/v3/teams"
 
     querystring = {'season':season, 'league':str(league_id)}

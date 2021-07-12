@@ -6,73 +6,7 @@ import itertools as it
 import plotly.express as px
 import functions as ft
 
-
-def line_ups(team1_id, team2_id):
-    """
-        Gets the portraits of each player with his name, number and position in the starting 11 of both teams.
-
-       Args:
-        team_id_1 (integer): API-Football team ID.
-        team_id_2 (integer): API-Football team ID.
-
-        Returns:
-            images: Portaits of players for each team.
-            string: Names of players for each team.
-            string: Positions of players for each team.
-            string: Number of players for each team.
-    """
-    
-    df1 = ft.get_starting_11(team1_id)
-    df2 = ft.get_starting_11(team2_id)
-    with col1:
-        for i in range(len(df1['player_id'])):
-            st.image(ft.get_photo(df1.iloc[i, 0]), width=100)
-            st.write(df1.iloc[i, 1])
-            st.write('Pos: ', df1.iloc[i, 2])
-            st.write('No.: ', str(df1.iloc[i, 3]))
-            st.write("###")
-    with col3:
-        for i in range(len(df2['player_id'])):
-            st.image(ft.get_photo(df2.iloc[i, 0]), width=100)
-            st.write(df2.iloc[i, 1])
-            st.write('Pos: ', df2.iloc[i, 2])
-            st.write('No.: ', str(df2.iloc[i, 3]))
-            st.write("###")
-
-def injured_players(team1_id, team2_id):
-    """
-        Gets all players of both team who are currently(!) injured.
-
-        Args:
-        team_id_1 (integer): API-Football team ID.
-        team_id_2 (integer): API-Football team ID
-
-        Returns:
-            string: Name of injured players for each team.
-        """
-    df1 = ft.get_injured_player(team1_id)
-    df2 = ft.get_injured_player(team2_id)
-    with col1:
-        if df1.empty:
-            st.write('**No injuries are known!**')
-        else:
-            for i in range(len(df1['player_id'])):
-                st.image(ft.get_photo(df1.iloc[i, 0]), width=100)
-                st.write(df1.iloc[i, 1])
-                st.write('Status: ', df1.iloc[i, 2])
-                st.write("###")
-    with col3:
-        if df2.empty:
-            st.write('**No injuries are known!**')
-        else:
-            for i in range(len(df2['player_id'])):
-                st.image(ft.get_photo(df2.iloc[i, 0]), width=100)
-                st.write(df2.iloc[i, 1])
-                st.write('Status: ', df2.iloc[i, 2])
-                st.write("###")
-
-#Setting the background picture of the app
-
+# Setting the background picture of the app
 st.markdown(
 """
 <style>
@@ -89,31 +23,33 @@ st.markdown(
 unsafe_allow_html=True
 )
 
-#Setting up a sidebar with league and team selection
-
+# Get all leagues the API currently supports with their corresponding IDs in a dict with get_all_leagues()
 leagues = ft.get_all_leagues()
 
+# Creating a select box where the user can choose from all leagues that were pulled in the previous steps
+# st.sidebar.write("###") is used to insert linebreaks 
 league = st.sidebar.selectbox('Select League', list(leagues.keys()), index=list(leagues.keys()).index('Bundesliga 1'))
 st.sidebar.write("###")
 st.sidebar.write("###")
 
+# Get league id from the league the user selected 
 league_id = leagues[league]
+
+# Get all teams that are in the league the user selected 
 teams = ft.get_teams_of_league(league_id)
 
+# Create select box where the user can select a team from the league he/she defined previously
 team1 = st.sidebar.selectbox('Select Team 1', teams)
 team2 = st.sidebar.selectbox('Select Team 2', teams, index=2)
 
-#Pulling ids of teams based on sidebar selection with get_team_id function
-
+# Pulling ids of teams based on sidebar selection with get_team_id()
 team1_id = ft.get_team_id(team1)
 team2_id = ft.get_team_id(team2)
 
-#Definition of variables for prediciton
-
+# Definition of variables for prediciton + home and away team
 pred, home_team, away_team = ft.predictions(team1_id, team2_id)
 
-#Setting up the header of application with three columns
-
+# Defining the column spacing the header of the application with three columns
 col1, col2, col3 = st.beta_columns([20,80,20])
 with col2:
     st.title('FOOTBALL PREDICTOR')
@@ -121,8 +57,8 @@ with col2:
 st.write("###")
 st.write("###")
 
-#Pulling percentages of prediction for win, draw and loss and implementation of animation to show winner with button
-
+# Pulling percentages of prediction for win, draw and loss 
+# Implementation of animation to show winner with button
 col1, col2, col3= st.beta_columns([50,50,50])
 with col1:
     st.write('_Win_: ', pred['percent']['home'])
@@ -139,8 +75,7 @@ with col3:
     ft.get_logo(away_team)
     st.write("###")
 
-#Adding streamlit radio to middle column for selection of functionalities
-
+# Adding radio buttons to the middle column for feature selection 
 st.write("###")
 with col2:
     st.write("###")
@@ -149,10 +84,24 @@ with col2:
         ('Line-ups', 'Standings', 'Head 2 Head', 'Injured Players')
     )
 
-    #Calling fucntions according to selected functionality
-
+    # Calling fucntions according to selected functionality
     if info == 'Line-ups':
-        line_ups(home_team, away_team)
+        df1 = ft.get_starting_11(home_team)
+        df2 = ft.get_starting_11(away_team)
+        with col1:
+            for i in range(len(df1['player_id'])):
+                st.image(ft.get_photo(df1.iloc[i, 0]), width=100)
+                st.write(df1.iloc[i, 1])
+                st.write('Pos: ', df1.iloc[i, 2])
+                st.write('No.: ', str(df1.iloc[i, 3]))
+                st.write("###")
+        with col3:
+            for i in range(len(df2['player_id'])):
+                st.image(ft.get_photo(df2.iloc[i, 0]), width=100)
+                st.write(df2.iloc[i, 1])
+                st.write('Pos: ', df2.iloc[i, 2])
+                st.write('No.: ', str(df2.iloc[i, 3]))
+                st.write("###")
 
     elif info == 'Head 2 Head':
         with col1:
@@ -213,4 +162,23 @@ with col2:
             st.write('## Form: ', dict_team2['form'])
 
     elif info == 'Injured Players':
-        injured_players(home_team, away_team)
+        df1 = ft.get_injured_player(home_team)
+        df2 = ft.get_injured_player(away_team)
+        with col1:
+            if df1.empty:
+                st.write('**No injuries are known!**')
+            else:
+                for i in range(len(df1['player_id'])):
+                    st.image(ft.get_photo(df1.iloc[i, 0]), width=100)
+                    st.write(df1.iloc[i, 1])
+                    st.write('Status: ', df1.iloc[i, 2])
+                    st.write("###")
+        with col3:
+            if df2.empty:
+                st.write('**No injuries are known!**')
+            else:
+                for i in range(len(df2['player_id'])):
+                    st.image(ft.get_photo(df2.iloc[i, 0]), width=100)
+                    st.write(df2.iloc[i, 1])
+                    st.write('Status: ', df2.iloc[i, 2])
+                    st.write("###")
