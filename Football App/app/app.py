@@ -6,28 +6,6 @@ import itertools as it
 import plotly.express as px
 import functions as ft
 
-#@st.cache(suppress_st_warning=True)
-def get_standings(team_id, season='2020'):
-    """
-    Gets the current position of a team in the league it is playing in.
-
-    Args:
-        team_id (int): API-Football team ID.
-
-    Returns:
-        integer: An integer indicating the position in the league.
-    """    
-    url = "https://api-football-v1.p.rapidapi.com/v3/standings"
-    
-    year = datetime.datetime.now().year
-
-    querystring = {"season":str(season),"team":str(team_id)}
-
-    response = requests.request("GET", url, headers=header_params, params=querystring)
-    
-    data = json.loads(response.text)
-    
-    return data['response'][0]['league']['standings'][0][0]['rank']
 
 def line_ups(team1_id, team2_id):
     """
@@ -42,7 +20,8 @@ def line_ups(team1_id, team2_id):
             string: Names of players for each team.
             string: Positions of players for each team.
             string: Number of players for each team.
-        """
+    """
+    
     df1 = ft.get_starting_11(team1_id)
     df2 = ft.get_starting_11(team2_id)
     with col1:
