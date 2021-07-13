@@ -169,7 +169,7 @@ def get_injured_player(team_id, date=datetime.date.today()):
 
 def get_starting_11(team_id):
     """
-    Gets the satrting line up of the last game a team has played.
+    Gets the starting line up of the last game a team has played.
 
     Args:
         team_id (integer): API-Football team ID.
