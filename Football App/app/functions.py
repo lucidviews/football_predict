@@ -7,7 +7,7 @@ import numpy as np
 import streamlit as st
 
 header_params = {
-            'x-rapidapi-key': "eff8f82f7dmsh5acc88f9a56c302p1b47acjsnfe16ac64e984",
+            'x-rapidapi-key': "ENTER VALID KEY",
             'x-rapidapi-host': "api-football-v1.p.rapidapi.com"
             }
 
